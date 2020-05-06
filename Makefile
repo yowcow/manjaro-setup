@@ -13,7 +13,7 @@ all: /swapfile /etc/localtime /etc/fonts/conf.d/70-noto-cjk.conf
 /etc/fonts/conf.d/%: /etc/fonts/conf.avail/%
 	sudo ln -snf $< $@
 
-setup: $(HOME)/.npmrc $(HOME)/.zshlocal
+setup: $(HOME)/.npmrc $(HOME)/.zshlocal /usr/local/bin/rebar3
 	sudo pacman -R \
 		ibus \
 		|| true;
@@ -22,6 +22,7 @@ setup: $(HOME)/.npmrc $(HOME)/.zshlocal
 		docker \
 		docker-compose \
 		erlang \
+		firefox \
 		fcitx-im \
 		fcitx-configtool \
 		fcitx-mozc \
@@ -63,5 +64,10 @@ $(HOME)/.npm:
 
 $(HOME)/.zshlocal:
 	echo 'export PATH=~/.gem/ruby/2.7.0/bin:$$PATH' > $@
+
+/usr/local/bin/rebar3: VERSION := 3.13.1
+/usr/local/bin/rebar3:
+	sudo curl -L https://github.com/erlang/rebar3/releases/download/$(VERSION)/rebar3 -o $@ && \
+		sudo chmod 755 $@
 
 .PHONY: all setup
