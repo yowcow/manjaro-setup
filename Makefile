@@ -17,7 +17,7 @@ all: /swapfile /etc/localtime /etc/fonts/conf.d/70-noto-cjk.conf
 /etc/fonts/conf.d/%: /etc/fonts/conf.avail/%
 	sudo ln -snf $< $@
 
-install: $(HOME)/.npmrc $(HOME)/.zshlocal /usr/local/bin/rebar3
+install: /usr/local/bin/rebar3
 	sudo pacman -Syu --noconfirm --needed \
 		bind-tools \
 		docker \
@@ -56,15 +56,6 @@ install: $(HOME)/.npmrc $(HOME)/.zshlocal /usr/local/bin/rebar3
 		;
 	gem i neovim \
 		;
-
-$(HOME)/.npmrc: $(HOME)/.npm
-	echo "prefix = $<" > $@
-
-$(HOME)/.npm:
-	mkdir -p $@
-
-$(HOME)/.zshlocal:
-	echo 'export PATH=~/.gem/ruby/2.7.0/bin:$$PATH' > $@
 
 /usr/local/bin/rebar3: VERSION := 3.13.1
 /usr/local/bin/rebar3:
