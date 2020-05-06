@@ -1,4 +1,11 @@
-all: /etc/localtime /etc/fonts/conf.d/70-noto-cjk.conf
+all: /swapfile /etc/localtime /etc/fonts/conf.d/70-noto-cjk.conf
+	free
+
+/swapfile:
+	sudo dd if=/dev/zero of=$@ bs=1024 count=8138702
+	sudo chmod 600 $@
+	sudo mkswap $@
+	sudo swapon $@
 
 /etc/localtime: /usr/share/zoneinfo/Asia/Tokyo
 	sudo ln -snf $< $@
@@ -12,11 +19,16 @@ setup: $(HOME)/.npmrc $(HOME)/.zshlocal
 		|| true;
 	sudo pacman -Syu --noconfirm --needed \
 		bind-tools \
+		docker \
+		docker-compose \
+		erlang \
 		fcitx-im \
 		fcitx-configtool \
 		fcitx-mozc \
 		git \
+		go \
 		htop \
+		jq \
 		neovim \
 		noto-fonts \
 		noto-fonts-cjk \
@@ -24,6 +36,7 @@ setup: $(HOME)/.npmrc $(HOME)/.zshlocal
 		noto-fonts-extra \
 		nodejs \
 		npm \
+		perl \
 		python \
 		python-pynvim \
 		ripgrep \
@@ -32,7 +45,10 @@ setup: $(HOME)/.npmrc $(HOME)/.zshlocal
 		ttf-fira-sans \
 		ttf-fira-code \
 		tmux \
+		weechat \
 		zsh \
+		;
+	sudo usermod -aG docker yowcow \
 		;
 	npm install -g neovim \
 		;
