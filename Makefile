@@ -1,17 +1,12 @@
-TIMEZONE := Asia/Tokyo
+all: /etc/localtime /etc/fonts/conf.d/70-noto-cjk.conf
 
-all: /etc/localtime $(HOME)/.npmrc
-
-/etc/localtime: /usr/share/zoneinfo/$(TIMEZONE)
+/etc/localtime: /usr/share/zoneinfo/Asia/Tokyo
 	sudo ln -snf $< $@
 
-$(HOME)/.npmrc: $(HOME)/.npm
-	echo "prefix = $<" > $@
+/etc/fonts/conf.d/%: /etc/fonts/conf.avail/%
+	sudo ln -snf $< $@
 
-$(HOME)/.npm:
-	mkdir -p $@
-
-install:
+install: $(HOME)/.npmrc $(HOME)/.zshlocal
 	sudo pacman -Syu --noconfirm --needed \
 		git \
 		neovim \
@@ -35,3 +30,14 @@ install:
 		;
 	gem i neovim \
 		;
+
+$(HOME)/.npmrc: $(HOME)/.npm
+	echo "prefix = $<" > $@
+
+$(HOME)/.npm:
+	mkdir -p $@
+
+$(HOME)/.zshlocal:
+	echo 'export PATH=~/.gem/ruby/2.7.0/bin:$$PATH' > $@
+
+.PHONY: all install
