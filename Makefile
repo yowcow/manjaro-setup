@@ -6,9 +6,17 @@ all: /etc/localtime /etc/fonts/conf.d/70-noto-cjk.conf
 /etc/fonts/conf.d/%: /etc/fonts/conf.avail/%
 	sudo ln -snf $< $@
 
-install: $(HOME)/.npmrc $(HOME)/.zshlocal
+setup: $(HOME)/.npmrc $(HOME)/.zshlocal
+	sudo pacman -R \
+		ibus \
+		|| true;
 	sudo pacman -Syu --noconfirm --needed \
+		bind-tools \
+		fcitx-im \
+		fcitx-configtool \
+		fcitx-mozc \
 		git \
+		htop \
 		neovim \
 		noto-fonts \
 		noto-fonts-cjk \
@@ -40,4 +48,4 @@ $(HOME)/.npm:
 $(HOME)/.zshlocal:
 	echo 'export PATH=~/.gem/ruby/2.7.0/bin:$$PATH' > $@
 
-.PHONY: all install
+.PHONY: all setup
