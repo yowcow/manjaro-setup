@@ -59,7 +59,8 @@ install: /usr/local/bin/rebar3
 
 /usr/local/bin/rebar3: VERSION := 3.13.1
 /usr/local/bin/rebar3:
-	sudo curl -L https://github.com/erlang/rebar3/releases/download/$(VERSION)/rebar3 -o $@ && \
-		sudo chmod 755 $@
+	sudo curl -SL https://github.com/erlang/rebar3/releases/download/$(VERSION)/rebar3 -o $@ \
+		&& sudo chmod 755 $@ \
+		;
 
 .PHONY: all install
