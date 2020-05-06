@@ -1,5 +1,9 @@
 all: /swapfile /etc/localtime /etc/fonts/conf.d/70-noto-cjk.conf
-	free
+	free \
+		;
+	sudo pacman -R \
+		ibus \
+		|| true;
 
 /swapfile:
 	sudo dd if=/dev/zero of=$@ bs=1024 count=8138702
@@ -13,10 +17,7 @@ all: /swapfile /etc/localtime /etc/fonts/conf.d/70-noto-cjk.conf
 /etc/fonts/conf.d/%: /etc/fonts/conf.avail/%
 	sudo ln -snf $< $@
 
-setup: $(HOME)/.npmrc $(HOME)/.zshlocal /usr/local/bin/rebar3
-	sudo pacman -R \
-		ibus \
-		|| true;
+install: $(HOME)/.npmrc $(HOME)/.zshlocal /usr/local/bin/rebar3
 	sudo pacman -Syu --noconfirm --needed \
 		bind-tools \
 		docker \
@@ -70,4 +71,4 @@ $(HOME)/.zshlocal:
 	sudo curl -L https://github.com/erlang/rebar3/releases/download/$(VERSION)/rebar3 -o $@ && \
 		sudo chmod 755 $@
 
-.PHONY: all setup
+.PHONY: all install
